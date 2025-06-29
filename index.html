@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,20 +75,132 @@
         .overlay.active {
             display: block;
         }
+
+        /* Back to Top Button */
+        #backToTopBtn {
+            display: none; /* Hidden by default */
+            position: fixed; /* Fixed position */
+            bottom: 20px; /* Place at the bottom */
+            right: 20px; /* Place at the right */
+            z-index: 99; /* Ensure it's above other content */
+            background-color: #2563eb; /* Blue-600 */
+            color: white;
+            padding: 12px 15px;
+            border-radius: 50%; /* Circular button */
+            font-size: 24px;
+            line-height: 1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.3s;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+
+        #backToTopBtn:hover {
+            background-color: #1e40af; /* Blue-700 */
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 40; /* Below header, above main content */
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%; /* Start off-screen */
+            width: 70%; /* Adjust as needed */
+            max-width: 300px;
+            height: 100%;
+            background-color: #1e40af; /* Blue-700 */
+            color: white;
+            padding-top: 6rem; /* Space for header */
+            transition: right 0.3s ease-in-out;
+            z-index: 50; /* Same as header */
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .mobile-menu.active {
+            right: 0; /* Slide in */
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .mobile-menu ul li {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu ul li:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu ul li a {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: white;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .mobile-menu ul li a:hover {
+            color: #bfdbfe; /* Blue-200 */
+        }
+
+        .hamburger-icon {
+            display: none; /* Hidden on desktop */
+            cursor: pointer;
+            font-size: 2rem;
+            line-height: 1;
+            z-index: 60; /* Above header content */
+        }
+
+        @media (max-width: 767px) { /* md breakpoint for Tailwind is 768px */
+            nav {
+                display: none; /* Hide desktop nav */
+            }
+            .hamburger-icon {
+                display: block; /* Show hamburger on mobile */
+            }
+        }
     </style>
-    <meta name="monetag" content="33a9d823e7887fb8f7d2e7e168279d3f">
 </head>
 <body class="antialiased">
 
     <!-- Overlay element for image zoom -->
     <div id="overlay" class="overlay"></div>
 
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <ul>
+            <li><a href="#home" onclick="toggleMobileMenu()">Home</a></li>
+            <li><a href="#about" onclick="toggleMobileMenu()">About Us</a></li>
+            <li><a href="#services" onclick="toggleMobileMenu()">Services</a></li>
+            <li><a href="#contact" onclick="toggleMobileMenu()">Contact</a></li>
+        </ul>
+    </div>
+
     <!-- Header Section -->
     <header class="bg-blue-800 text-white p-4 shadow-md fixed w-full z-50 rounded-b-lg animate-fade-in-down">
         <div class="container mx-auto flex justify-between items-center">
             <!-- Company name -->
             <h1 class="text-3xl font-bold rounded-md">ProActive Advanced Manpower Agency - PAMA</h1>
-            <nav>
+            <nav class="hidden md:block"> <!-- Hide on small screens -->
                 <ul class="flex space-x-6">
                     <li><a href="#home" class="hover:text-blue-200 transition duration-300 rounded-md">Home</a></li>
                     <li><a href="#about" class="hover:text-blue-200 transition duration-300 rounded-md">About Us</a></li>
@@ -96,6 +208,10 @@
                     <li><a href="#contact" class="hover:text-blue-200 transition duration-300 rounded-md">Contact</a></li>
                 </ul>
             </nav>
+            <!-- Hamburger Icon for Mobile -->
+            <div class="hamburger-icon md:hidden" onclick="toggleMobileMenu()">
+                &#9776; <!-- Unicode for hamburger icon -->
+            </div>
         </div>
     </header>
 
@@ -106,6 +222,7 @@
             alt="PAMA Banner"
             class="w-full max-w-5xl object-cover rounded-b-lg"
             style="max-height:340px;"
+            loading="lazy" <!-- Added lazy loading -->
         >
     </section>
 
@@ -122,7 +239,11 @@
                 </p>
             </div>
             <div class="md:w-1/2 flex justify-center">
-                <img src="https://www.dropbox.com/scl/fi/1ibq4badjxllkxw469wan/Gemini_Generated_Image_ovrvp8ovrvp8ovrv.png?rlkey=ln3fswxtc08u4g94qxkv5o6x9&st=6i4smu2w&dl=1" alt="Professional Teamwork" class="rounded-xl shadow-lg w-full max-w-md">
+                <img src="https://www.dropbox.com/scl/fi/1ibq4badjxllkxw469wan/Gemini_Generated_Image_ovrvp8ovrvp8ovrv.png?rlkey=ln3fswxtc08u4g94qxkv5o6x9&st=6i4smu2w&dl=1"
+                     alt="Professional Teamwork"
+                     class="rounded-xl shadow-lg w-full max-w-md"
+                     loading="lazy" <!-- Added lazy loading -->
+                >
             </div>
         </div>
     </section>
@@ -138,7 +259,9 @@
                          src="https://www.dropbox.com/scl/fi/yeg82vap035ixc39yleuq/480712799_639292915300142_1871515763526169482_n.jpg?rlkey=0auc6xmcokb2019521wcm2s5b&st=wx0wsqeq&dl=1"
                          alt="Overseas Placement Service Icon"
                          class="mx-auto mb-6 rounded-full cursor-zoom-in"
-                         onclick="toggleImageZoom(event)">
+                         onclick="toggleImageZoom(event)"
+                         loading="lazy" <!-- Added lazy loading -->
+                    >
                     <p class="text-gray-600 text-center rounded-md">
                         Connecting skilled Filipino professionals with rewarding career opportunities worldwide, ensuring a smooth transition.
                     </p>
@@ -150,7 +273,9 @@
                          src="https://www.dropbox.com/scl/fi/kcuoqcgmfq847ygxzdlaw/481203093_639292921966808_1219962960224489156_n.jpg?rlkey=iaa6l7ft2evruotuxifrjreze&st=v8gf94il&dl=1"
                          alt="Local Staffing Service Icon"
                          class="mx-auto mb-6 rounded-full cursor-zoom-in"
-                         onclick="toggleImageZoom(event)">
+                         onclick="toggleImageZoom(event)"
+                         loading="lazy" <!-- Added lazy loading -->
+                    >
                     <p class="text-gray-600 text-center rounded-md">
                         Providing local businesses with highly qualified candidates for various industries, from entry-level to executive roles.
                     </p>
@@ -162,7 +287,9 @@
                          src="https://www.dropbox.com/scl/fi/vpbifburf279xs2sdnc4h/480761662_640518838510883_2213547113591668343_n.jpg?rlkey=cmd9wp91kszw2rsf95de2y8v5&st=brv34f4s&dl=1"
                          alt="Recruitment Consulting Service Icon"
                          class="mx-auto mb-6 rounded-full cursor-zoom-in"
-                         onclick="toggleImageZoom(event)">
+                         onclick="toggleImageZoom(event)"
+                         loading="lazy" <!-- Added lazy loading -->
+                    >
                     <p class="text-gray-600 text-center rounded-md">
                         Offering expert advice and tailored solutions to optimize your recruitment processes and talent acquisition strategies.
                     </p>
@@ -182,39 +309,39 @@
                 <!-- Contact Information Column -->
                 <div class="flex flex-col items-center lg:items-start gap-8 lg:w-1/2">
                     <!-- Phone Number -->
-                    <div class="flex items-center space-x-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <div class="flex items-center space-x-3 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300 group-hover:text-white transition duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                         </svg>
                         <!-- Make phone number clickable -->
-                        <a href="tel:+639615183913" class="text-xl hover:underline">+63 961 518 3913 - Smart</a>
+                        <a href="tel:+639615183913" class="text-xl hover:text-blue-200 transition duration-300">+63 961 518 3913 - Smart</a>
                     </div>
                     <!-- Email Address -->
-                    <div class="flex items-center space-x-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <div class="flex items-center space-x-3 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300 group-hover:text-white transition duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                         <!-- Make email address clickable -->
-                        <a href="mailto:pama@linkfree.site" class="text-xl hover:underline">pama@linkfree.site</a>
+                        <a href="mailto:pama@linkfree.site" class="text-xl hover:text-blue-200 transition duration-300">pama@linkfree.site</a>
                     </div>
                     <!-- Facebook Page -->
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-3 group">
                         <!-- Facebook SVG Icon (simple version) -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" viewBox="0 0 24 24" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300 group-hover:text-white transition duration-300" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.505 1.492-3.891 3.776-3.891 1.094 0 2.24.195 2.24.195v2.459h-1.245c-1.24 0-1.625.772-1.625 1.563V12h2.773l-.443 2.89h-2.33V22c4.781-.751 8.438-4.888 8.438-9.879C22 6.477 17.523 2 12 2z"/>
                         </svg>
                         <!-- Link to Facebook page (replace with actual URL) -->
-                        <a href="https://www.facebook.com/OlgaVelascoToyotaValenzuela/about" target="_blank" rel="noopener noreferrer" class="text-xl hover:underline">PAMA FB Page</a>
+                        <a href="https://www.facebook.com/OlgaVelascoToyotaValenzuela/about" target="_blank" rel="noopener noreferrer" class="text-xl hover:text-blue-200 transition duration-300">PAMA FB Page</a>
                     </div>
                     <!-- Google Map Link -->
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-3 group">
                         <!-- Google Maps SVG Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" viewBox="0 0 24 24" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300 group-hover:text-white transition duration-300" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                         </svg>
                         <!-- Link to Google Map -->
                         <a href="https://www.google.com/local/place/fid/0x3397b5006304dd79:0xc0d03b6de332a15b/photosphere?iu=https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid%3DH6DOyQt2iesaRw3osUVduQ%26cb_client%3Dsearch.gws-prod.gps%26yaw%3D297.87628%26pitch%3D0%26thumbfov%3D100%26w%3D0%26h%3D0&ik=CAISFkg2RE95UXQyaWVzYVJ3M29zVVZkdVE%3D&sa=X&ved=2ahUKEwjRyYit-5aOAxUMha8BHdsWHXMQpx96BAhCEAU"
-                           target="_blank" rel="noopener noreferrer" class="text-xl hover:underline">Google Map</a>
+                           target="_blank" rel="noopener noreferrer" class="text-xl hover:text-blue-200 transition duration-300">Google Map</a>
                     </div>
                 </div>
 
@@ -224,7 +351,9 @@
                          src="https://www.dropbox.com/scl/fi/8k6f2olge5pke3mlgdrkf/AAA-PAMA2.PNG?rlkey=d6o9xehbo146lnsew6pl3e80g&st=f6dhzdfy&dl=1"
                          alt="PAMA Contact Image"
                          class="w-full h-auto rounded-xl shadow-lg object-cover cursor-zoom-in"
-                         onclick="toggleImageZoom(event)">
+                         onclick="toggleImageZoom(event)"
+                         loading="lazy" <!-- Added lazy loading -->
+                    >
                 </div>
             </div>
 
@@ -252,31 +381,73 @@
         </div>
     </section>
 
+    <!-- Back to Top Button -->
+    <button id="backToTopBtn" title="Go to top">
+        &#9650; <!-- Up arrow icon -->
+    </button>
+
     <script>
-        // Store the currently zoomed image element and its original parent
+        // Smooth Scrolling for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Back to Top Button Logic
+        const backToTopBtn = document.getElementById("backToTopBtn");
+
+        window.onscroll = function() {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        }
+
+        backToTopBtn.addEventListener("click", function() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        });
+
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+            mobileMenu.classList.toggle('active');
+            mobileMenuOverlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+
+        // Image Zoom Functionality (Existing logic, slightly refined)
         let currentZoomedImage = null;
         let originalParent = null;
-        let originalNextSibling = null; // To reinsert it in the correct position
+        let originalNextSibling = null;
 
         function toggleImageZoom(event) {
             const image = event.target;
             const overlay = document.getElementById('overlay');
 
-            // If the clicked element is not an image, do nothing
             if (image.tagName !== 'IMG') {
                 return;
             }
 
             if (image.classList.contains('zoomed-image')) {
-                // If the clicked image is already zoomed, unzoom it
                 image.classList.remove('zoomed-image');
-                // Restore original rounded class for service images
                 if (image.id.startsWith('serviceImage')) {
                     image.classList.remove('rounded-xl');
                     image.classList.add('rounded-full');
                 }
 
-                // Move the image back to its original position
                 if (originalParent) {
                     if (originalNextSibling) {
                         originalParent.insertBefore(image, originalNextSibling);
@@ -286,45 +457,35 @@
                 }
 
                 overlay.classList.remove('active');
-                document.body.style.overflow = ''; // Restore scrolling
-                currentZoomedImage = null; // Clear the reference
+                document.body.style.overflow = '';
+                currentZoomedImage = null;
                 originalParent = null;
                 originalNextSibling = null;
             } else {
-                // If another image is currently zoomed, unzoom it first
                 if (currentZoomedImage) {
-                    toggleImageZoom({ target: currentZoomedImage }); // Unzoom the previous one
+                    toggleImageZoom({ target: currentZoomedImage });
                 }
 
-                // Store original position before moving
                 originalParent = image.parentNode;
                 originalNextSibling = image.nextSibling;
 
-                // Zoom the clicked image
                 image.classList.add('zoomed-image');
-                // Handle rounded corners: remove rounded-full if present, add rounded-xl
                 if (image.classList.contains('rounded-full')) {
                     image.classList.remove('rounded-full');
                     image.classList.add('rounded-xl');
                 } else if (!image.classList.contains('rounded-xl')) {
-                    // For contactImage which is already rounded-xl, ensure it has rounded-xl
                     image.classList.add('rounded-xl');
                 }
 
-                // Move image to body to ensure it's on top of all content
-                document.body.appendChild(image);
-
+                document.body.appendChild(image); // Move image to body for highest z-index
                 overlay.classList.add('active');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling when zoomed
-                currentZoomedImage = image; // Set the current zoomed image
+                document.body.style.overflow = 'hidden';
+                currentZoomedImage = image;
             }
         }
 
-        // Close zoom when clicking outside the image (on the overlay)
         document.getElementById('overlay').addEventListener('click', function() {
             if (currentZoomedImage) {
-                // Simulate click on the zoomed image to trigger toggleImageZoom
-                // This ensures the correct image is unzoomed and state is reset
                 toggleImageZoom({ target: currentZoomedImage });
             }
         });
