@@ -44,19 +44,21 @@
 
         /* Styles for the zoomed image */
         .zoomed-image {
-            position: fixed;
+            position: fixed; /* Fixed positioning relative to the viewport */
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(1.5); /* Adjust scale for desired zoom level */
+            transform: translate(-50%, -50%); /* Ensures perfect centering */
             width: auto; /* Allow image to scale naturally */
             height: auto; /* Allow image to scale naturally */
             max-width: 90vw; /* Max width of viewport */
             max-height: 90vh; /* Max height of viewport */
-            z-index: 1000; /* Ensure it's on top */
+            z-index: 9999; /* Ensure it's on top of all other elements */
             cursor: zoom-out; /* Indicate it can be clicked again to zoom out */
             transition: transform 0.3s ease-in-out, max-width 0.3s ease-in-out, max-height 0.3s ease-in-out;
-            border-radius: 0.75rem; /* rounded-xl */
+            border-radius: 0.75rem; /* Apply rounded-xl when zoomed */
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Large shadow for emphasis */
+            object-fit: contain; /* Ensure the entire image is visible without cropping */
+            background-color: black; /* Add a background to prevent transparency issues if image aspect ratio is different from container */
         }
 
         /* Overlay to dim background when image is zoomed */
@@ -67,7 +69,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.7);
-            z-index: 999;
+            z-index: 9998; /* Just below the zoomed image */
             display: none; /* Hidden by default */
         }
         .overlay.active {
@@ -131,7 +133,11 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Service Box 1 -->
                 <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
-                    <img src="https://www.dropbox.com/scl/fi/yeg82vap035ixc39yleuq/480712799_639292915300142_1871515763526169482_n.jpg?rlkey=0auc6xmcokb2019521wcm2s5b&st=wx0wsqeq&dl=1" alt="Service Icon 1" class="mx-auto mb-6 rounded-full">
+                    <img id="serviceImage1"
+                         src="https://www.dropbox.com/scl/fi/yeg82vap035ixc39yleuq/480712799_639292915300142_1871515763526169482_n.jpg?rlkey=0auc6xmcokb2019521wcm2s5b&st=wx0wsqeq&dl=1"
+                         alt="Overseas Placement Service Icon"
+                         class="mx-auto mb-6 rounded-full cursor-zoom-in"
+                         onclick="toggleImageZoom(event)">
                     <p class="text-gray-600 text-center rounded-md">
                         Connecting skilled Filipino professionals with rewarding career opportunities worldwide, ensuring a smooth transition.
                     </p>
@@ -139,7 +145,11 @@
 
                 <!-- Service Box 2 -->
                 <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
-                    <img src="https://www.dropbox.com/scl/fi/kcuoqcgmfq847ygxzdlaw/481203093_639292921966808_1219962960224489156_n.jpg?rlkey=iaa6l7ft2evruotuxifrjreze&st=v8gf94il&dl=1" alt="Service Icon 2" class="mx-auto mb-6 rounded-full">
+                    <img id="serviceImage2"
+                         src="https://www.dropbox.com/scl/fi/kcuoqcgmfq847ygxzdlaw/481203093_639292921966808_1219962960224489156_n.jpg?rlkey=iaa6l7ft2evruotuxifrjreze&st=v8gf94il&dl=1"
+                         alt="Local Staffing Service Icon"
+                         class="mx-auto mb-6 rounded-full cursor-zoom-in"
+                         onclick="toggleImageZoom(event)">
                     <p class="text-gray-600 text-center rounded-md">
                         Providing local businesses with highly qualified candidates for various industries, from entry-level to executive roles.
                     </p>
@@ -147,7 +157,11 @@
 
                 <!-- Service Box 3 -->
                 <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
-                    <img src="https://www.dropbox.com/scl/fi/vpbifburf279xs2sdnc4h/480761662_640518838510883_2213547113591668343_n.jpg?rlkey=cmd9wp91kszw2rsf95de2y8v5&st=brv34f4s&dl=1" alt="Service Icon 3" class="mx-auto mb-6 rounded-full">
+                    <img id="serviceImage3"
+                         src="https://www.dropbox.com/scl/fi/vpbifburf279xs2sdnc4h/480761662_640518838510883_2213547113591668343_n.jpg?rlkey=cmd9wp91kszw2rsf95de2y8v5&st=brv34f4s&dl=1"
+                         alt="Recruitment Consulting Service Icon"
+                         class="mx-auto mb-6 rounded-full cursor-zoom-in"
+                         onclick="toggleImageZoom(event)">
                     <p class="text-gray-600 text-center rounded-md">
                         Offering expert advice and tailored solutions to optimize your recruitment processes and talent acquisition strategies.
                     </p>
@@ -209,7 +223,7 @@
                          src="https://www.dropbox.com/scl/fi/8k6f2olge5pke3mlgdrkf/AAA-PAMA2.PNG?rlkey=d6o9xehbo146lnsew6pl3e80g&st=f6dhzdfy&dl=1"
                          alt="PAMA Contact Image"
                          class="w-full h-auto rounded-xl shadow-lg object-cover cursor-zoom-in"
-                         onclick="toggleImageZoom()">
+                         onclick="toggleImageZoom(event)">
                 </div>
             </div>
 
@@ -238,25 +252,81 @@
     </section>
 
     <script>
-        function toggleImageZoom() {
-            const image = document.getElementById('contactImage');
+        // Store the currently zoomed image element and its original parent
+        let currentZoomedImage = null;
+        let originalParent = null;
+        let originalNextSibling = null; // To reinsert it in the correct position
+
+        function toggleImageZoom(event) {
+            const image = event.target;
             const overlay = document.getElementById('overlay');
 
+            // If the clicked element is not an image, do nothing
+            if (image.tagName !== 'IMG') {
+                return;
+            }
+
             if (image.classList.contains('zoomed-image')) {
-                // If zoomed, remove zoom and hide overlay
+                // If the clicked image is already zoomed, unzoom it
                 image.classList.remove('zoomed-image');
+                // Restore original rounded class for service images
+                if (image.id.startsWith('serviceImage')) {
+                    image.classList.remove('rounded-xl');
+                    image.classList.add('rounded-full');
+                }
+
+                // Move the image back to its original position
+                if (originalParent) {
+                    if (originalNextSibling) {
+                        originalParent.insertBefore(image, originalNextSibling);
+                    } else {
+                        originalParent.appendChild(image);
+                    }
+                }
+
                 overlay.classList.remove('active');
                 document.body.style.overflow = ''; // Restore scrolling
+                currentZoomedImage = null; // Clear the reference
+                originalParent = null;
+                originalNextSibling = null;
             } else {
-                // If not zoomed, add zoom and show overlay
+                // If another image is currently zoomed, unzoom it first
+                if (currentZoomedImage) {
+                    toggleImageZoom({ target: currentZoomedImage }); // Unzoom the previous one
+                }
+
+                // Store original position before moving
+                originalParent = image.parentNode;
+                originalNextSibling = image.nextSibling;
+
+                // Zoom the clicked image
                 image.classList.add('zoomed-image');
+                // Handle rounded corners: remove rounded-full if present, add rounded-xl
+                if (image.classList.contains('rounded-full')) {
+                    image.classList.remove('rounded-full');
+                    image.classList.add('rounded-xl');
+                } else if (!image.classList.contains('rounded-xl')) {
+                    // For contactImage which is already rounded-xl, ensure it has rounded-xl
+                    image.classList.add('rounded-xl');
+                }
+
+                // Move image to body to ensure it's on top of all content
+                document.body.appendChild(image);
+
                 overlay.classList.add('active');
                 document.body.style.overflow = 'hidden'; // Prevent scrolling when zoomed
+                currentZoomedImage = image; // Set the current zoomed image
             }
         }
 
         // Close zoom when clicking outside the image (on the overlay)
-        document.getElementById('overlay').addEventListener('click', toggleImageZoom);
+        document.getElementById('overlay').addEventListener('click', function() {
+            if (currentZoomedImage) {
+                // Simulate click on the zoomed image to trigger toggleImageZoom
+                // This ensures the correct image is unzoomed and state is reset
+                toggleImageZoom({ target: currentZoomedImage });
+            }
+        });
     </script>
 
 </body>
