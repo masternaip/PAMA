@@ -8,10 +8,77 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Font - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Link to external CSS file -->
+    <!-- Link to external CSS file (ensure style.css is available if you use it) -->
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Custom animations for fade-in effects */
+        .animate-fade-in-down {
+            animation: fadeInDown 1s ease-out forwards;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Styles for the zoomed image */
+        .zoomed-image {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1.5); /* Adjust scale for desired zoom level */
+            width: auto; /* Allow image to scale naturally */
+            height: auto; /* Allow image to scale naturally */
+            max-width: 90vw; /* Max width of viewport */
+            max-height: 90vh; /* Max height of viewport */
+            z-index: 1000; /* Ensure it's on top */
+            cursor: zoom-out; /* Indicate it can be clicked again to zoom out */
+            transition: transform 0.3s ease-in-out, max-width 0.3s ease-in-out, max-height 0.3s ease-in-out;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Large shadow for emphasis */
+        }
+
+        /* Overlay to dim background when image is zoomed */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none; /* Hidden by default */
+        }
+        .overlay.active {
+            display: block;
+        }
+    </style>
 </head>
 <body class="antialiased">
+
+    <!-- Overlay element for image zoom -->
+    <div id="overlay" class="overlay"></div>
 
     <!-- Header Section -->
     <header class="bg-blue-800 text-white p-4 shadow-md fixed w-full z-50 rounded-b-lg animate-fade-in-down">
@@ -21,7 +88,6 @@
             <nav>
                 <ul class="flex space-x-6">
                     <li><a href="#home" class="hover:text-blue-200 transition duration-300 rounded-md">Home</a></li>
-                    <!-- Links now point to the IDs of sections within this single HTML file -->
                     <li><a href="#about" class="hover:text-blue-200 transition duration-300 rounded-md">About Us</a></li>
                     <li><a href="#services" class="hover:text-blue-200 transition duration-300 rounded-md">Services</a></li>
                     <li><a href="#contact" class="hover:text-blue-200 transition duration-300 rounded-md">Contact</a></li>
@@ -30,45 +96,42 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero-section text-white py-24 px-4 text-center rounded-b-lg flex items-center justify-center min-h-screen-75 relative overflow-hidden">
-        <div class="container mx-auto relative z-10">
-            <h2 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6 drop-shadow-lg animate-fade-in-up">
-                Proactive Advanced Manpower Agency
-            </h2>
-            <p class="text-xl md:text-2xl mb-8 font-light italic animate-fade-in-up delay-200">
-                "PAMA: Beyond Manpower. Beyond Expectations."
-            </p>
-        </div>
+    <!-- Banner Section -->
+    <section id="home" class="flex justify-center items-center w-full bg-white pt-28 pb-0 shadow-lg rounded-b-lg overflow-hidden">
+        <img
+            src="https://www.dropbox.com/scl/fi/delbgxcd1q5bbespxqcav/aaa-pama-banner.PNG?rlkey=mxnfbvzibr3auourxhx95pex5&st=x4w9y26h&dl=1"
+            alt="PAMA Banner"
+            class="w-full max-w-5xl object-cover rounded-b-lg"
+            style="max-height:340px;"
+        >
     </section>
 
-    <!-- About Us Section - Integrated directly -->
+    <!-- About Us Section -->
     <section id="about" class="py-16 md:py-24 bg-white rounded-lg shadow-md mx-4 md:mx-auto my-12 max-w-6xl px-6 lg:px-12 animate-fade-in-up delay-300">
         <div class="container mx-auto flex flex-col md:flex-row items-center gap-12">
             <div class="md:w-1/2">
                 <h2 class="text-3xl md:text-4xl font-bold text-blue-700 mb-6">About PAMA</h2>
                 <p class="text-lg leading-relaxed mb-4">
-                    At **Proactive Advanced Manpower Agency (PAMA)**, we don't just fill positions—we build futures. We are a premier manpower agency committed to the ethical and efficient deployment of highly skilled Filipino professionals to employers around the world.
+                    At <strong>Proactive Advanced Manpower Agency (PAMA)</strong>, we don't just fill positions—we build futures. We are a premier manpower agency committed to the ethical and efficient deployment of highly skilled Filipino professionals to employers around the world.
                 </p>
                 <p class="text-lg leading-relaxed">
-                    Our **proactive** approach means we are always ahead of the curve, anticipating the needs of both our clients and our candidates. We use **advanced** recruitment technologies and rigorous screening processes to ensure a perfect match, every time. We believe in empowering careers. By providing comprehensive support and guidance to every applicant, we help them achieve their professional aspirations. For our partners, we deliver a seamless and reliable recruitment experience, providing the right talent at the right time.
+                    <!-- Additional about us content can go here -->
                 </p>
             </div>
             <div class="md:w-1/2 flex justify-center">
-                <img src="https://placehold.co/600x400/87CEEB/FFFFFF?text=Professional+Teamwork" alt="Professional Teamwork" class="rounded-xl shadow-lg w-full max-w-md">
+                <img src="https://www.dropbox.com/scl/fi/1ibq4badjxllkxw469wan/Gemini_Generated_Image_ovrvp8ovrvp8ovrv.png?rlkey=ln3fswxtc08u4g94qxkv5o6x9&st=6i4smu2w&dl=1" alt="Professional Teamwork" class="rounded-xl shadow-lg w-full max-w-md">
             </div>
         </div>
     </section>
 
-    <!-- Our Services Section - Integrated directly -->
+    <!-- Our Services Section -->
     <section id="services" class="py-16 px-4 bg-gray-100 rounded-lg shadow-md mx-4 md:mx-auto my-12 max-w-6xl px-6 lg:px-12 animate-fade-in-up delay-400">
         <div class="container mx-auto">
             <h2 class="text-4xl font-bold text-center mb-12 text-blue-800 rounded-md">Our Services</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Service Box 1 -->
                 <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
-                    <img src="https://placehold.co/100x100/007bff/ffffff?text=Service+1" alt="Service Icon 1" class="mx-auto mb-6 rounded-full">
-                    <h3 class="text-2xl font-semibold text-blue-700 mb-4 text-center rounded-md">Overseas Placement</h3>
+                    <img src="https://www.dropbox.com/scl/fi/yeg82vap035ixc39yleuq/480712799_639292915300142_1871515763526169482_n.jpg?rlkey=0auc6xmcokb2019521wcm2s5b&st=wx0wsqeq&dl=1" alt="Service Icon 1" class="mx-auto mb-6 rounded-full">
                     <p class="text-gray-600 text-center rounded-md">
                         Connecting skilled Filipino professionals with rewarding career opportunities worldwide, ensuring a smooth transition.
                     </p>
@@ -76,8 +139,7 @@
 
                 <!-- Service Box 2 -->
                 <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
-                    <img src="https://placehold.co/100x100/28a745/ffffff?text=Service+2" alt="Service Icon 2" class="mx-auto mb-6 rounded-full">
-                    <h3 class="text-2xl font-semibold text-blue-700 mb-4 text-center rounded-md">Local Staffing</h3>
+                    <img src="https://www.dropbox.com/scl/fi/kcuoqcgmfq847ygxzdlaw/481203093_639292921966808_1219962960224489156_n.jpg?rlkey=iaa6l7ft2evruotuxifrjreze&st=v8gf94il&dl=1" alt="Service Icon 2" class="mx-auto mb-6 rounded-full">
                     <p class="text-gray-600 text-center rounded-md">
                         Providing local businesses with highly qualified candidates for various industries, from entry-level to executive roles.
                     </p>
@@ -85,8 +147,7 @@
 
                 <!-- Service Box 3 -->
                 <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
-                    <img src="https://placehold.co/100x100/ffc107/ffffff?text=Service+3" alt="Service Icon 3" class="mx-auto mb-6 rounded-full">
-                    <h3 class="text-2xl font-semibold text-blue-700 mb-4 text-center rounded-md">Recruitment Consulting</h3>
+                    <img src="https://www.dropbox.com/scl/fi/vpbifburf279xs2sdnc4h/480761662_640518838510883_2213547113591668343_n.jpg?rlkey=cmd9wp91kszw2rsf95de2y8v5&st=brv34f4s&dl=1" alt="Service Icon 3" class="mx-auto mb-6 rounded-full">
                     <p class="text-gray-600 text-center rounded-md">
                         Offering expert advice and tailored solutions to optimize your recruitment processes and talent acquisition strategies.
                     </p>
@@ -95,28 +156,71 @@
         </div>
     </section>
 
-    <!-- Contact Us Section - Integrated directly -->
+    <!-- Contact Us Section -->
     <section id="contact" class="py-16 px-4 bg-blue-800 text-white rounded-t-lg animate-fade-in-up delay-500">
         <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-bold mb-8 rounded-md">Contact Us</h2>
-            <p class="text-lg mb-8 max-w-xl mx-auto rounded-md">
+            <h2 class="text-4xl font-bold mb-8">Contact Us</h2>
+            <p class="text-lg mb-8 max-w-xl mx-auto">
                 Have a question or want to work together? Feel free to reach out!
             </p>
-            <div class="flex flex-col md:flex-row justify-center items-center gap-8">
-                <div class="flex items-center space-x-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    <span class="text-xl rounded-md">+1 (123) 456-7890</span>
+            <div class="flex flex-col lg:flex-row justify-center items-start gap-8">
+                <!-- Contact Information Column -->
+                <div class="flex flex-col items-center lg:items-start gap-8 lg:w-1/2">
+                    <!-- Phone Number -->
+                    <div class="flex items-center space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        <!-- Make phone number clickable -->
+                        <a href="tel:+639615183913" class="text-xl hover:underline">+63 961 518 3913 - Smart</a>
+                    </div>
+                    <!-- Email Address -->
+                    <div class="flex items-center space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <!-- Make email address clickable -->
+                        <a href="mailto:pama@linkfree.site" class="text-xl hover:underline">pama@linkfree.site</a>
+                    </div>
+                    <!-- Facebook Page -->
+                    <div class="flex items-center space-x-3">
+                        <!-- Facebook SVG Icon (simple version) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.505 1.492-3.891 3.776-3.891 1.094 0 2.24.195 2.24.195v2.459h-1.245c-1.24 0-1.625.772-1.625 1.563V12h2.773l-.443 2.89h-2.33V22c4.781-.751 8.438-4.888 8.438-9.879C22 6.477 17.523 2 12 2z"/>
+                        </svg>
+                        <!-- Link to Facebook page (replace with actual URL) -->
+                        <a href="https://www.facebook.com/OlgaVelascoToyotaValenzuela/about" target="_blank" rel="noopener noreferrer" class="text-xl hover:underline">PAMA FB Page</a>
+                    </div>
+                    <!-- Google Map Link -->
+                    <div class="flex items-center space-x-3">
+                        <!-- Google Maps SVG Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                        <!-- Link to Google Map -->
+                        <a href="https://www.google.com/local/place/fid/0x3397b5006304dd79:0xc0d03b6de332a15b/photosphere?iu=https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid%3DH6DOyQt2iesaRw3osUVduQ%26cb_client%3Dsearch.gws-prod.gps%26yaw%3D297.87628%26pitch%3D0%26thumbfov%3D100%26w%3D0%26h%3D0&ik=CAISFkg2RE95UXQyaWVzYVJ3M29zVVZkdVE%3D&sa=X&ved=2ahUKEwjRyYit-5aOAxUMha8BHdsWHXMQpx96BAhCEAU"
+                           target="_blank" rel="noopener noreferrer" class="text-xl hover:underline">Google Map</a>
+                    </div>
                 </div>
-                <div class="flex items-center space-x-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <span class="text-xl rounded-md">info@pama.com</span>
+
+                <!-- Image Column -->
+                <div class="w-full lg:w-1/2 mt-8 lg:mt-0">
+                    <img id="contactImage"
+                         src="https://www.dropbox.com/scl/fi/8k6f2olge5pke3mlgdrkf/AAA-PAMA2.PNG?rlkey=d6o9xehbo146lnsew6pl3e80g&st=f6dhzdfy&dl=1"
+                         alt="PAMA Contact Image"
+                         class="w-full h-auto rounded-xl shadow-lg object-cover cursor-zoom-in"
+                         onclick="toggleImageZoom()">
                 </div>
             </div>
-            <form id="contactForm" class="mt-12 max-w-lg mx-auto bg-blue-700 p-8 rounded-xl shadow-lg">
+
+            <!-- Address Section (moved to the bottom and centered) -->
+            <div class="mt-12 text-center max-w-2xl mx-auto">
+                <p class="text-xl font-semibold mb-2">Address:</p>
+                <p class="text-lg">#1925 TAN-BUILDING 3rd FLOOR ROOM 203 Rizal Avenue Tayuman Manila (Stop @LRT Tayuman Station Tawid Jollibee Beside BPI and Chinabank)</p>
+            </div>
+
+            <!-- The form section remains commented out as per your previous input -->
+            <!--form id="contactForm" class="mt-12 max-w-lg mx-auto bg-blue-700 p-8 rounded-xl shadow-lg">
                 <div class="mb-6">
                     <input type="text" id="name" placeholder="Your Name" class="w-full p-3 rounded-md bg-blue-600 border border-blue-500 placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-300">
                 </div>
@@ -126,55 +230,33 @@
                 <div class="mb-6">
                     <textarea id="message" placeholder="Your Message" rows="5" class="w-full p-3 rounded-md bg-blue-600 border border-blue-500 placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-300"></textarea>
                 </div>
-                <button type="submit" class="bg-white text-blue-800 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-blue-100 transition duration-300 transform hover:scale-105">
+                <button-- type="submit" class="bg-white text-blue-800 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-blue-100 transition duration-300 transform hover:scale-105">
                     Send Message
                 </button>
-            </form>
+            </form-->
         </div>
     </section>
 
-    <!-- Footer Section -->
-    <footer class="bg-blue-900 text-white py-6 text-center rounded-t-lg">
-        <div class="container mx-auto">
-            <p class="text-sm rounded-md">&copy; 2025 ProActive Advanced Manpower Agency - PAMA. All rights reserved.</p>
-        </div>
-    </footer>
-
     <script>
-        // JavaScript for handling the contact form submission
-        document.addEventListener('DOMContentLoaded', function() {
-            const contactForm = document.getElementById('contactForm');
+        function toggleImageZoom() {
+            const image = document.getElementById('contactImage');
+            const overlay = document.getElementById('overlay');
 
-            if (contactForm) {
-                contactForm.addEventListener('submit', function(event) {
-                    event.preventDefault(); // Prevent the default form submission
-
-                    // Get form values
-                    const name = document.getElementById('name').value;
-                    const email = document.getElementById('email').value;
-                    const message = document.getElementById('message').value;
-
-                    // Basic validation
-                    if (name.trim() === '' || email.trim() === '' || message.trim() === '') {
-                        console.error('Please fill in all fields.');
-                        // In a real application, display a user-friendly message on the page
-                        return;
-                    }
-
-                    // Simulate form submission (in a real app, you'd send this to a server)
-                    console.log('Form Submitted!');
-                    console.log('Name:', name);
-                    console.log('Email:', email);
-                    console.log('Message:', message);
-
-                    console.log('Thank you for your message! We will get back to you soon.');
-                    // In a real application, display a success message to the user on the page
-
-                    // Optionally, clear the form after submission
-                    contactForm.reset();
-                });
+            if (image.classList.contains('zoomed-image')) {
+                // If zoomed, remove zoom and hide overlay
+                image.classList.remove('zoomed-image');
+                overlay.classList.remove('active');
+                document.body.style.overflow = ''; // Restore scrolling
+            } else {
+                // If not zoomed, add zoom and show overlay
+                image.classList.add('zoomed-image');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when zoomed
             }
-        });
+        }
+
+        // Close zoom when clicking outside the image (on the overlay)
+        document.getElementById('overlay').addEventListener('click', toggleImageZoom);
     </script>
 
 </body>
